@@ -1,0 +1,174 @@
+@import "tailwindcss";
+
+/* Manual, class-based dark mode (".dark" on <html>) instead of Tailwind v4's
+   default OS-preference variant — the app has its own theme toggle. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  /* ── Type system ─────────────────────────────────────────────────────
+     Marcellus: a quiet, inscriptional serif — closer to carved stone or
+     minaret lettering than a magazine headline. Used sparingly, for the
+     dial and the biggest numerals only.
+     Outfit: geometric grotesque for UI — echoes the compass-and-straightedge
+     precision of girih pattern construction without costuming as "Arabic". */
+  --font-display: var(--font-marcellus), "Noto Serif", serif;
+  --font-body: var(--font-outfit), "Inter", system-ui, sans-serif;
+  --font-arabic-display: var(--font-amiri), "Noto Naskh Arabic", serif;
+  --font-arabic: var(--font-almarai), "Noto Sans Arabic", sans-serif;
+  --font-bengali: var(--font-noto-bengali), sans-serif;
+  --font-numeral: var(--font-space-mono), ui-monospace, monospace;
+
+  /* ── Color tokens ─────────────────────────────────────────────────────
+     Named per the frontend-design brief: deep jewel emerald + brass gold +
+     a green-black ink (not flat #000) + a warm ivory (not stark #fff). */
+  --color-ink-950: #050a08;
+  --color-ink-900: #0b1210;
+  --color-ink-800: #101a16;
+  --color-ink-700: #17241e;
+
+  --color-emerald-950: #062018;
+  --color-emerald-900: #0a3327;
+  --color-emerald-800: #0e4633;
+  --color-emerald-700: #0f5c3f;
+  --color-emerald-600: #146b4a;
+  --color-emerald-500: #1e8f63;
+  --color-emerald-400: #3aab7d;
+  --color-emerald-300: #6fc9a0;
+  --color-emerald-200: #a9e2c6;
+
+  --color-gold-800: #6f5720;
+  --color-gold-700: #9a7b2e;
+  --color-gold-600: #b6913c;
+  --color-gold-500: #c9a34e;
+  --color-gold-400: #dab86a;
+  --color-gold-300: #e8c877;
+  --color-gold-200: #f2ddA3;
+
+  --color-ivory-100: #fbf8f1;
+  --color-ivory: #f6f1e4;
+  --color-sand: #ede6d3;
+  --color-sand-dark: #e0d6b8;
+
+  --color-rose-alert: #c4614f;
+
+  --shadow-glass: 0 8px 32px rgba(6, 20, 15, 0.28);
+  --shadow-glow-gold: 0 0 40px rgba(201, 163, 78, 0.25);
+}
+
+/* ── Theme-mapped surface variables ──────────────────────────────────────
+   Components consume these (bg-[var(--surface)], not the raw palette) so
+   light/dark just flips a handful of custom properties. */
+:root {
+  color-scheme: light;
+  --bg: var(--color-ivory);
+  --bg-elevated: var(--color-ivory-100);
+  --surface-glass: rgba(255, 255, 255, 0.55);
+  --surface-glass-border: rgba(15, 92, 63, 0.14);
+  --text-primary: var(--color-ink-900);
+  --text-secondary: #4b5a52;
+  --text-muted: #7c8880;
+  --accent: var(--color-emerald-700);
+  --accent-strong: var(--color-emerald-800);
+  --gold: var(--color-gold-700);
+  --pattern-opacity: 0.05;
+}
+
+.dark {
+  color-scheme: dark;
+  --bg: var(--color-ink-900);
+  --bg-elevated: var(--color-ink-800);
+  --surface-glass: rgba(16, 26, 22, 0.55);
+  --surface-glass-border: rgba(201, 163, 78, 0.16);
+  --text-primary: var(--color-ivory-100);
+  --text-secondary: #c7d2cb;
+  --text-muted: #8a978f;
+  --accent: var(--color-emerald-400);
+  --accent-strong: var(--color-emerald-300);
+  --gold: var(--color-gold-400);
+  --pattern-opacity: 0.07;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  transition: background-color 0.35s ease, color 0.35s ease;
+}
+
+/* ── RTL (Arabic) ──────────────────────────────────────────────────────── */
+html[dir="rtl"] body {
+  font-family: var(--font-arabic);
+}
+html[dir="rtl"] .font-display {
+  font-family: var(--font-arabic-display);
+}
+html[lang="bn"] body {
+  font-family: var(--font-bengali);
+}
+
+/* ── Reusable primitives ───────────────────────────────────────────────── */
+@layer components {
+  .font-display {
+    font-family: var(--font-display);
+  }
+
+  .font-numeral {
+    font-family: var(--font-numeral);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.02em;
+  }
+
+  .glass-card {
+    background: var(--surface-glass);
+    border: 1px solid var(--surface-glass-border);
+    box-shadow: var(--shadow-glass);
+    backdrop-filter: blur(20px) saturate(140%);
+    -webkit-backdrop-filter: blur(20px) saturate(140%);
+    border-radius: 1.25rem;
+  }
+
+  .gold-text {
+    color: var(--gold);
+  }
+
+  .ink-btn {
+    background: linear-gradient(135deg, var(--color-emerald-700), var(--color-emerald-900));
+    color: var(--color-ivory-100);
+    border: 1px solid rgba(201, 163, 78, 0.35);
+  }
+  .dark .ink-btn {
+    background: linear-gradient(135deg, var(--color-emerald-600), var(--color-emerald-800));
+  }
+}
+
+/* ── Motion / accessibility ───────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+*:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--surface-glass-border);
+  border-radius: 999px;
+}

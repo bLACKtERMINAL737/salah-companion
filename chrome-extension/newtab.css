@@ -1,0 +1,112 @@
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(ellipse at top, #123c2c 0%, #0b1210 65%);
+  color: #f3efe3;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans-serif;
+}
+
+.wrap {
+  width: min(560px, 92vw);
+  text-align: center;
+}
+
+.clock {
+  font-size: 3.2rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+}
+
+.location {
+  margin-top: 4px;
+  color: #b9c4bd;
+  font-size: 0.9rem;
+}
+
+.next-card {
+  margin-top: 28px;
+  padding: 28px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(218, 184, 106, 0.25);
+  backdrop-filter: blur(12px);
+}
+
+.label {
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-size: 0.7rem;
+  color: #9aa79f;
+  margin: 0;
+}
+
+#next-name {
+  margin: 6px 0 0;
+  font-size: 2.4rem;
+  color: #dab86a;
+}
+
+.starts {
+  margin: 10px 0 0;
+  font-size: 0.9rem;
+  color: #cfd8d1;
+}
+
+.countdown {
+  margin: 4px 0 0;
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+.num {
+  font-variant-numeric: tabular-nums;
+}
+
+.grid {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+}
+
+.grid .cell {
+  padding: 10px 6px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 0.75rem;
+}
+
+.grid .cell .p-name {
+  color: #b9c4bd;
+  display: block;
+}
+
+.grid .cell .p-time {
+  color: #f3efe3;
+  font-weight: 600;
+  display: block;
+  margin-top: 2px;
+}
+
+.grid .cell.active {
+  border-color: #dab86a;
+  background: rgba(218, 184, 106, 0.08);
+}
+
+.open-app {
+  display: inline-block;
+  margin-top: 24px;
+  color: #dab86a;
+  text-decoration: none;
+  font-size: 0.85rem;
+}
+
+.open-app:hover {
+  text-decoration: underline;
+}
