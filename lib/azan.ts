@@ -13,14 +13,37 @@ export interface AzanVoice {
   file: string;
 }
 
+// ============================================================
+// 📌 এখানে আপনার অডিও ফাইলগুলোর লিংক বা পাথ দিন
+// ============================================================
+
 export const AZAN_VOICES: AzanVoice[] = [
-  { id: "makkah", label: "Makkah style", file: "https://github.com/bLACKtERMINAL737/salah-companion/blob/d44c5d041d4098a5d315b48fbd354113c5b4244f/Azaan%20in%20Makkah%20Beautiful%20Voice%20-%20Beautiful%20Azan%20made%20in%20Mecca%20-%20ISLAM%20-%20The%20Ultimate%20Peace%20(mp3cut.net).mp3" },
-  { id: "madinah", label: "Madinah style", file: "https://github.com/bLACKtERMINAL737/salah-companion/blob/d44c5d041d4098a5d315b48fbd354113c5b4244f/Azaan%20in%20Makkah%20Beautiful%20Voice%20-%20Beautiful%20Azan%20made%20in%20Mecca%20-%20ISLAM%20-%20The%20Ultimate%20Peace%20(mp3cut.net).mp3" },
-  { id: "short", label: "Short reminder chime", file: "https://github.com/bLACKtERMINAL737/salah-companion/blob/d44c5d041d4098a5d315b48fbd354113c5b4244f/Azaan%20in%20Makkah%20Beautiful%20Voice%20-%20Beautiful%20Azan%20made%20in%20Mecca%20-%20ISLAM%20-%20The%20Ultimate%20Peace%20(mp3cut.net).mp3" },
+  { 
+    id: "makkah", 
+    label: "Makkah style", 
+    file: "/audio/azan-makkah.mp3"  // লোকাল ফাইল (public/audio ফোল্ডারে রাখুন)
+  },
+  { 
+    id: "madinah", 
+    label: "Madinah style", 
+    file: "/audio/azan-madinah.mp3" 
+  },
+  { 
+    id: "short", 
+    label: "Short reminder chime", 
+    file: "/audio/azan-chime.mp3" 
+  },
 ];
+
+// ============================================================
+// 🎵 অডিও প্লেব্যাক লজিক
+// ============================================================
 
 let currentAudio: HTMLAudioElement | null = null;
 
+/**
+ * বর্তমান অডিও থামায় এবং রিসেট করে
+ */
 export function stopAzan(): void {
   if (currentAudio) {
     currentAudio.pause();
@@ -29,26 +52,75 @@ export function stopAzan(): void {
   }
 }
 
+/**
+ * অ্যাজান প্লে করে
+ * @param voiceId - কোন ভয়েস বাজাবে (makkah, madinah, short)
+ * @param volume - ভলিউম লেভেল (0.0 থেকে 1.0)
+ * @returns Promise<void>
+ */
 export function playAzan(voiceId: string, volume: number): Promise<void> {
+  // আগের অডিও থামান
   stopAzan();
   
-  const voice = AZAN_VOICES.find((v) => v.id === voiceId) ?? AZAN_VOICES[0];
+  // ভয়েস খুঁজে বের করুন
+  const voice = AZAN_VOICES.find((v) => v.id === voiceId);
   if (!voice) {
-    console.error("No azan voice available");
-    return Promise.reject("No voice found");
+    console.error(`❌ Voice not found: ${voiceId}`);
+    return Promise.reject(new Error(`Voice "${voiceId}" not found`));
   }
 
+  // অডিও তৈরি করুন
   const audio = new Audio(voice.file);
+  
+  // ভলিউম সেট করুন (0-1 এর মধ্যে)
   audio.volume = Math.min(1, Math.max(0, volume));
+  
+  // কারেন্ট অডিও ট্র্যাক রাখুন
   currentAudio = audio;
   
-  return audio.play().catch((err) => {
-    console.warn(`Azan play failed for ${voiceId}:`, err);
-    // ইউজারকে জানান (যেমন: টোস্ট নোটিফিকেশন)
-    throw err; // অথবা রি-থ্রো করুন
-  });
+  // অডিও প্লে করুন
+  return audio.play()
+    .then(() => {
+      console.log(`✅ Azan playing: ${voice.label}`);
+    })
+    .catch((err) => {
+      console.warn(`⚠️ Azan play failed for ${voiceId}:`, err);
+      
+      // ইউজার-ফ্রেন্ডলি এরর মেসেজ
+      let errorMessage = "Audio playback failed. ";
+      if (err.name === "NotAllowedError") {
+        errorMessage += "Please interact with the page first (click anywhere).";
+      } else if (err.name === "NotFoundError") {
+        errorMessage += `File not found: ${voice.file}. Please add the audio file.`;
+      } else {
+        errorMessage += err.message || "Unknown error.";
+      }
+      
+      throw new Error(errorMessage);
+    });
 }
 
+/**
+ * অ্যাজান প্রিভিউ (সেটিংসে প্রিভিউ করার জন্য)
+ */
 export function previewAzan(voiceId: string, volume: number): Promise<void> {
-  return playAzan(voiceId, volume);
+  // প্রিভিউতে ভলিউম একটু কম রাখুন (হঠাৎ জোরে আওয়াজ এড়াতে)
+  const previewVolume = Math.min(volume, 0.5);
+  return playAzan(voiceId, previewVolume);
+}
+
+/**
+ * বর্তমানে কোন অডিও বাজছে কিনা চেক করে
+ */
+export function isAzanPlaying(): boolean {
+  return currentAudio !== null && !currentAudio.paused;
+}
+
+/**
+ * বর্তমান অডিওর ভলিউম পরিবর্তন করে
+ */
+export function setAzanVolume(volume: number): void {
+  if (currentAudio) {
+    currentAudio.volume = Math.min(1, Math.max(0, volume));
+  }
 }
