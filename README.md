@@ -179,3 +179,4 @@ To try it: edit `APP_URL` at the top of `chrome-extension/newtab.js` to point at
 ## Attribution
 
 Prayer time math: [`adhan`](https://github.com/batoulapps/adhan-js) (Batoul Apps). Mosque data: © OpenStreetMap contributors, via the Overpass API. City search: Open-Meteo Geocoding. Reverse geocoding: BigDataCloud. Quran text/translation: alquran.cloud.
+# salah-companion
