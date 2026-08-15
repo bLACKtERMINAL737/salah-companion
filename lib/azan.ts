@@ -14,25 +14,12 @@ export interface AzanVoice {
 }
 
 export const AZAN_VOICES: AzanVoice[] = [
-  { id: "makkah", label: "Makkah style", file: "Azaan in Makkah Beautiful Voice - Beautiful Azan made in Mecca - ISLAM - The Ultimate Peace (mp3cut.net).mp3" },
-  { id: "madinah", label: "Madinah style", file: "Azaan in Makkah Beautiful Voice - Beautiful Azan made in Mecca - ISLAM - The Ultimate Peace (mp3cut.net).mp3" },
-  { id: "short", label: "Short reminder chime", file: "Azaan in Makkah Beautiful Voice - Beautiful Azan made in Mecca - ISLAM - The Ultimate Peace (mp3cut.net).mp3" },
+  { id: "makkah", label: "Makkah style", file: "/audio/azan-makkah.mp3" },
+  { id: "madinah", label: "Madinah style", file: "/audio/azan-madinah.mp3" },
+  { id: "short", label: "Short reminder chime", file: "/audio/azan-chime.mp3" },
 ];
 
 let currentAudio: HTMLAudioElement | null = null;
-
-export function playAzan(voiceId: string, volume: number): Promise<void> {
-  stopAzan();
-  const voice = AZAN_VOICES.find((v) => v.id === voiceId) ?? AZAN_VOICES[0]!;
-  const audio = new Audio(voice.file);
-  audio.volume = Math.min(1, Math.max(0, volume));
-  currentAudio = audio;
-  return audio.play().catch(() => {
-    // Most likely: the file hasn't been added yet, or autoplay was blocked
-    // because there was no recent user gesture. Either way, fail silently —
-    // the on-screen notification still fires regardless of audio.
-  });
-}
 
 export function stopAzan(): void {
   if (currentAudio) {
@@ -40,6 +27,26 @@ export function stopAzan(): void {
     currentAudio.currentTime = 0;
     currentAudio = null;
   }
+}
+
+export function playAzan(voiceId: string, volume: number): Promise<void> {
+  stopAzan();
+  
+  const voice = AZAN_VOICES.find((v) => v.id === voiceId) ?? AZAN_VOICES[0];
+  if (!voice) {
+    console.error("No azan voice available");
+    return Promise.reject("No voice found");
+  }
+
+  const audio = new Audio(voice.file);
+  audio.volume = Math.min(1, Math.max(0, volume));
+  currentAudio = audio;
+  
+  return audio.play().catch((err) => {
+    console.warn(`Azan play failed for ${voiceId}:`, err);
+    // ইউজারকে জানান (যেমন: টোস্ট নোটিফিকেশন)
+    throw err; // অথবা রি-থ্রো করুন
+  });
 }
 
 export function previewAzan(voiceId: string, volume: number): Promise<void> {
