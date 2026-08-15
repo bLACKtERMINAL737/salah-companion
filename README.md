@@ -55,20 +55,6 @@ salah-companion/
 
 ---
 
-## Getting started
-
-```bash
-npm install
-cp .env.example .env.local   # fill in whichever sections you want active
-npm run dev
-```
-
-Open http://localhost:3000 — prayer times, Qibla, calendar, Ramadan mode, and the mosque finder all work immediately with zero configuration.
-
-> **Turbopack note:** don't run `next dev --turbo` with this setup — Serwist's service-worker build uses webpack, and mixing the two throws a config conflict. Plain `next dev` / `next build` (the default scripts here) are webpack and work fine.
-
----
-
 ## Environment variables
 
 All of these are optional — the app degrades gracefully without any of them. Copy `.env.example` to `.env.local` and fill in what you want.
