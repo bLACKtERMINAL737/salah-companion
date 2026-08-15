@@ -14,9 +14,9 @@ export interface AzanVoice {
 }
 
 export const AZAN_VOICES: AzanVoice[] = [
-  { id: "makkah", label: "Makkah style", file: "/audio/azan-makkah.mp3" },
-  { id: "madinah", label: "Madinah style", file: "/audio/azan-madinah.mp3" },
-  { id: "short", label: "Short reminder chime", file: "/audio/azan-chime.mp3" },
+  { id: "makkah", label: "Makkah style", file: "https://github.com/bLACKtERMINAL737/salah-companion/blob/d44c5d041d4098a5d315b48fbd354113c5b4244f/Azaan%20in%20Makkah%20Beautiful%20Voice%20-%20Beautiful%20Azan%20made%20in%20Mecca%20-%20ISLAM%20-%20The%20Ultimate%20Peace%20(mp3cut.net).mp3" },
+  { id: "madinah", label: "Madinah style", file: "https://github.com/bLACKtERMINAL737/salah-companion/blob/d44c5d041d4098a5d315b48fbd354113c5b4244f/Azaan%20in%20Makkah%20Beautiful%20Voice%20-%20Beautiful%20Azan%20made%20in%20Mecca%20-%20ISLAM%20-%20The%20Ultimate%20Peace%20(mp3cut.net).mp3" },
+  { id: "short", label: "Short reminder chime", file: "https://github.com/bLACKtERMINAL737/salah-companion/blob/d44c5d041d4098a5d315b48fbd354113c5b4244f/Azaan%20in%20Makkah%20Beautiful%20Voice%20-%20Beautiful%20Azan%20made%20in%20Mecca%20-%20ISLAM%20-%20The%20Ultimate%20Peace%20(mp3cut.net).mp3" },
 ];
 
 let currentAudio: HTMLAudioElement | null = null;
