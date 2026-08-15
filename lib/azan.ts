@@ -14,7 +14,7 @@ export interface AzanVoice {
 }
 
 export const AZAN_VOICES: AzanVoice[] = [
-  { id: "makkah", label: "Makkah style", file: "/audio/azan-makkah.mp3" },
+  { id: "makkah", label: "Makkah style", file: "Azaan in Makkah Beautiful Voice - Beautiful Azan made in Mecca - ISLAM - The Ultimate Peace (mp3cut.net).mp3" },
   { id: "madinah", label: "Madinah style", file: "/audio/azan-madinah.mp3" },
   { id: "short", label: "Short reminder chime", file: "/audio/azan-chime.mp3" },
 ];
